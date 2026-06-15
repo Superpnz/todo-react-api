@@ -8,20 +8,17 @@ app.use(express.json());
 
 const DB_FILE = "./db.json";
 
-// читать данные
 const readDB = () => JSON.parse(fs.readFileSync(DB_FILE, "utf-8"));
 
-// сохранять данные
+
 const writeDB = (data) =>
   fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
 
-// GET tasks
 app.get("/tasks", (req, res) => {
   const db = readDB();
   res.json(db.tasks);
 });
 
-// POST task
 app.post("/tasks", (req, res) => {
   const db = readDB();
 
@@ -36,7 +33,21 @@ app.post("/tasks", (req, res) => {
   res.json(newTask);
 });
 
-// DELETE task
+app.patch("/tasks/:id", (req, res) => {
+  const db = readDB();
+
+  const task = db.tasks.find(t => t.id === req.params.id);
+
+  if (!task) {
+    return res.status(404).json({ error: "Task not found" });
+  }
+
+  Object.assign(task, req.body);
+  writeDB(db);
+
+  res.json(task);
+});
+
 app.delete("/tasks/:id", (req, res) => {
   const db = readDB();
 
