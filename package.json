@@ -1,0 +1,10 @@
+{
+  "name": "todo-react-api",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "json-server": "^1.0.0-beta.15"
+  }
+}
